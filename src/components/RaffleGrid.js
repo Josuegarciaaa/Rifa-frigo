@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const RaffleGrid = ({ selectedNumbers, separatedNumbers, onNumberSelect, onSeparate, totalTickets, totalPrice }) => {
+const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSelect, onSeparateTickets, totalTickets, totalPrice }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedNumbersToSeparate, setSelectedNumbersToSeparate] = useState([]);
   const [formData, setFormData] = useState({ name: '', phone: '' });
@@ -24,9 +24,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, onNumberSelect, onSepar
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (formData.name && formData.phone && selectedNumbersToSeparate.length > 0) {
-      selectedNumbersToSeparate.forEach(number => {
-        onSeparate(number, formData);
-      });
+      onSeparateTickets(selectedNumbersToSeparate, formData);
       setShowModal(false);
       setFormData({ name: '', phone: '' });
       setSelectedNumbersToSeparate([]);
@@ -43,12 +41,12 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, onNumberSelect, onSepar
     <>
       <div className="max-w-7xl mx-auto bg-white bg-opacity-10 backdrop-blur-md rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border border-white border-opacity-20 mb-8">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-center text-white mb-6 sm:mb-8 drop-shadow-lg">
-          🎫 Separa tus números
+           Separa tus números
         </h2>
 
         {/* Payment Instructions */}
         <div className="bg-yellow-500 bg-opacity-20 backdrop-blur-md rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border border-yellow-400 border-opacity-30">
-          <h3 className="text-lg sm:text-xl font-bold text-yellow-200 mb-4">📋 Instrucciones para separar boletos:</h3>
+          <h3 className="text-lg sm:text-xl font-bold text-yellow-200 mb-4"> Instrucciones para separar boletos:</h3>
           <div className="text-sm sm:text-base text-white space-y-2">
             <p><strong>1.</strong> Haz clic en los números que deseas seleccionar (se marcarán en azul)</p>
             <p><strong>2.</strong> Presiona el botón "✂️ Separar Seleccionados" que aparecerá abajo</p>
@@ -66,9 +64,9 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, onNumberSelect, onSepar
         <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-8 lg:grid-cols-10 gap-2 sm:gap-3 lg:gap-4 mb-6 sm:mb-8">
           {numbers.map((number) => {
             const quantity = selectedNumbers[number] || 0;
-            const separatedQuantity = separatedNumbers[number] || 0;
+            const isSeparated = separatedNumbers.some(ticket => ticket.number === number);
+            const isSold = soldNumbers.some(ticket => ticket.number === number);
             const isSelected = quantity > 0;
-            const isSeparated = separatedQuantity > 0;
             const isSelectedForSeparation = selectedNumbersToSeparate.includes(number);
 
             return (
@@ -77,7 +75,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, onNumberSelect, onSepar
                 className={`relative p-2 sm:p-3 lg:p-4 border-2 rounded-lg transition-all duration-300 ${
                   isSelected
                     ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white border-green-400 shadow-xl'
-                    : isSeparated
+                    : isSeparated || isSold
                     ? 'bg-gradient-to-br from-red-500 to-red-600 text-white border-red-400 shadow-xl cursor-not-allowed'
                     : isSelectedForSeparation && showModal
                     ? 'bg-gradient-to-br from-gray-500 to-gray-600 text-white border-gray-400 shadow-xl'
@@ -85,7 +83,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, onNumberSelect, onSepar
                     ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white border-blue-400 shadow-xl'
                     : 'bg-white bg-opacity-90 text-gray-800 border-gray-300 hover:border-orange-300 hover:shadow-lg cursor-pointer'
                 }`}
-                onClick={() => !isSelected && !isSeparated && !showModal && toggleNumberSelection(number)}
+                onClick={() => !isSelected && !isSeparated && !isSold && !showModal && toggleNumberSelection(number)}
               >
                 <div className="text-center font-bold text-sm sm:text-base lg:text-lg mb-2">
                   {number}
@@ -117,7 +115,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, onNumberSelect, onSepar
             </div>
             <div className="bg-purple-500 bg-opacity-20 rounded-lg p-3">
               <p className="text-sm text-purple-200">Boletos disponibles</p>
-              <p className="text-2xl font-bold text-purple-300">{100 - totalTickets - Object.values(separatedNumbers).reduce((sum, qty) => sum + qty, 0) - selectedNumbersToSeparate.length}</p>
+              <p className="text-2xl font-bold text-purple-300">{100 - totalTickets - separatedNumbers.length - selectedNumbersToSeparate.length}</p>
             </div>
           </div>
           {selectedNumbersToSeparate.length > 0 && (

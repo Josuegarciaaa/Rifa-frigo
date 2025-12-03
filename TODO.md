@@ -1,0 +1,5 @@
+- [ ] Add updateSeparatedTicket and deleteSeparatedTicket functions to database.js
+- [ ] Update App.js to add edit mode UI (inputs for name/phone, update button)
+- [ ] Add delete button to each ticket in admin panel
+- [ ] Handle state updates after edit/delete operations
+- [ ] Test CRUD operations
