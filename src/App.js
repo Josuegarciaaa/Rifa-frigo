@@ -134,11 +134,7 @@ function App() {
     setShowAdminPanel(false);
   };
 
-  const handleReactivateTicket = async (index) => {
-    const newSeparated = separatedNumbers.filter((_, i) => i !== index);
-    setSeparatedNumbers(newSeparated);
-    await db.set('separatedNumbers', newSeparated);
-  };
+
 
   const handleEditTicket = (ticket) => {
     setEditingTicket(ticket);
