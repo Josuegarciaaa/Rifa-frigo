@@ -17,7 +17,6 @@ function App() {
 
   // Calculate totals from selectedNumbers and separatedNumbers objects
   const totalTickets = Object.values(selectedNumbers).reduce((sum, qty) => sum + qty, 0);
-  const totalSeparated = separatedNumbers.length;
   const totalPrice = totalTickets * 50;
 
   // Load data from database on component mount
