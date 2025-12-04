@@ -89,17 +89,20 @@ function App() {
     // Save to PocketBase first to ensure persistence
     await db.set('separatedNumbers', newSeparated);
 
-    // Send WhatsApp messages for each number after saving
-    numbers.forEach(number => {
-      const message = ` *SOLICITUD PARA SEPARAR BOLETO*
+    // Send WhatsApp message with all selected numbers
+    const numbersList = numbers.join(', ');
+    const totalAmount = numbers.length * 50;
+    const message = ` *SOLICITUD PARA SEPARAR BOLETOS*
 
  *Datos del participante:*
 • Nombre: ${formData.name}
 • Teléfono: ${formData.phone}
-• Número solicitado: ${number}
+• Números solicitados: ${numbersList}
 
  *Información de pago:*
-• Precio: $50
+• Precio por boleto: $50
+• Cantidad de boletos: ${numbers.length}
+• Total a pagar: $${totalAmount}
 • Concepto: "numero(s) separado"
 • Tarjeta: 4910897092374420 (HSBC)
 • Nombre: Josue Francisco Garcia Cepeda
@@ -109,9 +112,8 @@ function App() {
  *IMPORTANTE:* Envía el comprobante de pago a este mismo número después de realizar la transferencia/deposito.
 
 ¡Gracias por participar! `;
-      const url = `https://wa.me/8442818979?text=${encodeURIComponent(message)}`;
-      window.location.href = url;
-    });
+    const url = `https://wa.me/8442818979?text=${encodeURIComponent(message)}`;
+    window.location.href = url;
   };
 
   const handleAdminClick = () => {

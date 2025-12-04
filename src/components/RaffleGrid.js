@@ -75,7 +75,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
               <p><strong>Nombre:</strong> Josue Francisco Garcia Cepeda</p>
               <p><strong>Concepto:</strong> numero separado</p>
             </div>
-            <p><strong>5.</strong> <span onClick={() => window.open(`https://wa.me/8442818979`, '_blank')} className="cursor-pointer hover:text-blue-300 underline">Envía el comprobante de pago por WhatsApp al numero 8442818979</span></p>
+            <p><strong>5.</strong> Al separar el boleto se te enviará automáticamente a WhatsApp para confirmar la compra. Si no abre, favor de enviar comprobante al número 8442818979</p>
           </div>
         </div>
 
@@ -169,6 +169,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Ingresa tu nombre completo"
+                  style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}
                 />
               </div>
               <div>
@@ -188,6 +189,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
                   }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Ingresa tu número de celular (10 dígitos)"
+                  style={{ WebkitTransform: 'translateZ(0)', transform: 'translateZ(0)' }}
                 />
                 {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
               </div>
