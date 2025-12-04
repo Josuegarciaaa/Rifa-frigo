@@ -7,7 +7,7 @@ function App() {
   const [selectedNumbers, setSelectedNumbers] = useState({});
   const [separatedNumbers, setSeparatedNumbers] = useState([]);
   const [soldNumbers, setSoldNumbers] = useState([]);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [adminPassword, setAdminPassword] = useState('');
@@ -51,10 +51,11 @@ function App() {
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
         const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-        setTimeLeft({ days, hours, minutes });
+        setTimeLeft({ days, hours, minutes, seconds });
       } else {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0 });
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
 
@@ -259,7 +260,7 @@ function App() {
             </div>
             <div className="mb-6">
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 drop-shadow-lg"> Tiempo restante para el sorteo:</h3>
-              <div className="grid grid-cols-3 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                 <div className="bg-white bg-opacity-20 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-lg border border-white border-opacity-20">
                   <div className="text-2xl sm:text-3xl font-bold text-yellow-300">{timeLeft.days}</div>
                   <div className="text-xs sm:text-sm text-white">Días</div>
@@ -271,6 +272,10 @@ function App() {
                 <div className="bg-white bg-opacity-20 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-lg border border-white border-opacity-20">
                   <div className="text-2xl sm:text-3xl font-bold text-yellow-300">{timeLeft.minutes}</div>
                   <div className="text-xs sm:text-sm text-white">Minutos</div>
+                </div>
+                <div className="bg-white bg-opacity-20 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-lg border border-white border-opacity-20">
+                  <div className="text-2xl sm:text-3xl font-bold text-yellow-300">{timeLeft.seconds}</div>
+                  <div className="text-xs sm:text-sm text-white">Segundos</div>
                 </div>
               </div>
             </div>

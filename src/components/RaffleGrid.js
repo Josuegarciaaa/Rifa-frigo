@@ -4,8 +4,22 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
   const [showModal, setShowModal] = useState(false);
   const [selectedNumbersToSeparate, setSelectedNumbersToSeparate] = useState([]);
   const [formData, setFormData] = useState({ name: '', phone: '' });
+  const [phoneError, setPhoneError] = useState('');
 
   const numbers = Array.from({ length: 100 }, (_, i) => i + 1);
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Número de tarjeta copiado al portapapeles');
+    }).catch(err => {
+      console.error('Error al copiar: ', err);
+    });
+  };
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^\d{10}$/;
+    return phoneRegex.test(phone);
+  };
 
   const toggleNumberSelection = (number) => {
     setSelectedNumbersToSeparate(prev =>
@@ -23,11 +37,14 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (formData.name && formData.phone && selectedNumbersToSeparate.length > 0) {
+    if (formData.name && formData.phone && validatePhone(formData.phone) && selectedNumbersToSeparate.length > 0) {
       onSeparateTickets(selectedNumbersToSeparate, formData);
       setShowModal(false);
       setFormData({ name: '', phone: '' });
       setSelectedNumbersToSeparate([]);
+      setPhoneError('');
+    } else if (!validatePhone(formData.phone)) {
+      setPhoneError('El número de teléfono debe ser numérico y tener exactamente 10 dígitos.');
     }
   };
 
@@ -35,6 +52,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
     setShowModal(false);
     setFormData({ name: '', phone: '' });
     setSelectedNumbersToSeparate([]);
+    setPhoneError('');
   };
 
   return (
@@ -53,7 +71,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
             <p><strong>3.</strong> Completa tus datos (nombre y teléfono)</p>
             <p><strong>4.</strong> Realiza el pago de $50 por boleto a:</p>
             <div className="bg-white bg-opacity-20 rounded-lg p-3 mt-3">
-              <p><strong>Tarjeta:</strong> 4910897092374420 (HSBC)</p>
+              <p><strong>Tarjeta:</strong> 4910897092374420 (HSBC) <button onClick={() => copyToClipboard('4910897092374420')} className="ml-2 bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600">Copiar</button></p>
               <p><strong>Nombre:</strong> Josue Francisco Garcia Cepeda</p>
               <p><strong>Concepto:</strong> numero separado</p>
             </div>
@@ -160,11 +178,18 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
                 <input
                   type="tel"
                   required
+                  maxLength="10"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, phone: e.target.value});
+                    if (phoneError) setPhoneError('');
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Ingresa tu número de celular"
+                  placeholder="Ingresa tu número de celular (10 dígitos)"
                 />
+                {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
               </div>
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-sm text-yellow-800">
                 <p className="font-semibold mb-1"> Datos de pago:</p>
