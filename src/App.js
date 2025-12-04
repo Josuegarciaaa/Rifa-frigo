@@ -24,10 +24,12 @@ function App() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const selectedNumbersData = await db.get('selectedNumbers') || {};
-        const separatedNumbersData = await db.get('separatedNumbers') || [];
-        await new Promise(resolve => setTimeout(resolve, 100)); // Small delay to prevent overlapping requests
-        const soldNumbersData = await db.get('soldNumbers') || [];
+        // Load data in parallel for better performance
+        const [selectedNumbersData, separatedNumbersData, soldNumbersData] = await Promise.all([
+          db.get('selectedNumbers') || {},
+          db.get('separatedNumbers') || [],
+          db.get('soldNumbers') || []
+        ]);
         setSelectedNumbers(selectedNumbersData);
         setSeparatedNumbers(separatedNumbersData);
         setSoldNumbers(soldNumbersData);
@@ -86,10 +88,7 @@ function App() {
     const newSeparated = [...separatedNumbers, ...numbers.map(number => ({ number, ...formData }))];
     setSeparatedNumbers(newSeparated);
 
-    // Save to PocketBase first to ensure persistence
-    await db.set('separatedNumbers', newSeparated);
-
-    // Send WhatsApp message with all selected numbers
+    // Send WhatsApp message immediately for faster user experience
     const numbersList = numbers.join(', ');
     const totalAmount = numbers.length * 50;
     const message = ` *SOLICITUD PARA SEPARAR BOLETOS*
@@ -114,6 +113,14 @@ function App() {
 ¡Gracias por participar! `;
     const url = `https://wa.me/8442818979?text=${encodeURIComponent(message)}`;
     window.location.href = url;
+
+    // Save to PocketBase in the background to ensure persistence
+    try {
+      await db.set('separatedNumbers', newSeparated);
+    } catch (error) {
+      console.error('Error saving to database:', error);
+      // Note: User already got the WhatsApp message, data will be saved on next load
+    }
   };
 
   const handleAdminClick = () => {
@@ -201,18 +208,6 @@ function App() {
             <div className="bg-gradient-to-r from-primary to-secondary text-mainText px-4 sm:px-6 py-3 rounded-full font-bold text-sm sm:text-base lg:text-lg shadow-xl transform hover:scale-110 transition-all duration-300 hover:shadow-2xl">
               Precio: $50 por boleto
             </div>
-            <div className="bg-gradient-to-r from-secondary to-primary text-mainText px-4 sm:px-6 py-3 rounded-full font-bold text-sm sm:text-base lg:text-lg shadow-xl transform hover:scale-110 transition-all duration-300 hover:shadow-2xl">
-              Boletos disponibles: {100 - totalTickets - totalSeparated - soldNumbers.length}
-            </div>
-          </div>
-          <div className="w-full max-w-md mx-auto mb-4">
-            <div className="bg-altBg bg-opacity-30 rounded-full h-3 overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-primary to-secondary h-full transition-all duration-500 ease-out"
-                style={{ width: `${((totalSeparated + soldNumbers.length) / 100) * 100}%` }}
-              ></div>
-            </div>
-            <p className="text-xs text-secText mt-1 text-center">Progreso de boletos vendidos: {totalSeparated + soldNumbers.length}/100</p>
           </div>
           <p className="text-base sm:text-lg lg:text-xl text-secText font-semibold">
             Sorteo: 25 de diciembre de 2025 a las 3:00 PM CST

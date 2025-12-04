@@ -4,7 +4,20 @@ const pb = new PocketBase('https://rifas-frigo.pockethost.io/');
 
 let isSaving = false;
 
-const get = async (key) => {
+// Cache para reducir llamadas a la BD
+let cache = {
+  separatedNumbers: null,
+  lastFetch: null,
+  cacheDuration: 5000 // 5 segundos
+};
+
+const isCacheValid = () => {
+  return cache.separatedNumbers !== null && 
+         cache.lastFetch !== null && 
+         (Date.now() - cache.lastFetch) < cache.cacheDuration;
+};
+
+const get = async (key, forceRefresh = false) => {
 
   if (key === 'selectedNumbers') {
     try {
@@ -17,57 +30,54 @@ const get = async (key) => {
   }
 
   // -----------------------------------------
-  // OBTENER SEPARADOS (vendidos)
+  // OBTENER SEPARADOS/VENDIDOS (con caché)
   // -----------------------------------------
-  else if (key === 'separatedNumbers') {
-    try {
-      const records = await pb.collection('tickets').getFullList({
-        filter: 'vendido=true'   // filtro boolean correcto
-      });
-
-      return records.map(record => ({
-        number: parseInt(record.num__boleto),
-        name: record.nombre,
-        phone: record.telefono || '',
-        id: record.id
-      }));
-
-    } catch (error) {
-      if (error.name !== 'AbortError') {
-        console.error('Error reading from PocketBase:', error);
-      }
-      return [];
+  else if (key === 'separatedNumbers' || key === 'soldNumbers') {
+    
+    // Usar caché si es válido y no se fuerza refresh
+    if (!forceRefresh && isCacheValid()) {
+      console.log('Usando caché para', key);
+      return cache.separatedNumbers;
     }
-  }
 
-  // -----------------------------------------
-  // OBTENER SOLO VENDIDOS
-  // -----------------------------------------
-  else if (key === 'soldNumbers') {
     try {
-      const records = await pb.collection('tickets').getFullList({
-        filter: 'vendido=true'
+      console.log('Consultando PocketBase para', key);
+      
+      // Optimizaciones:
+      // 1. Usar perPage en lugar de getFullList para controlar la carga
+      // 2. Ordenar en el servidor
+      // 3. Seleccionar solo campos necesarios
+      const records = await pb.collection('tickets').getList(1, 500, {
+        filter: 'vendido=true',
+        sort: 'num__boleto',
+        fields: 'id,num__boleto,nombre,telefono',
+        requestKey: 'get-tickets' // Cancelar requests duplicados
       });
 
-      return records.map(record => ({
+      const result = records.items.map(record => ({
         number: parseInt(record.num__boleto),
         name: record.nombre,
         phone: record.telefono || '',
         id: record.id
       }));
 
+      // Actualizar caché
+      cache.separatedNumbers = result;
+      cache.lastFetch = Date.now();
+
+      return result;
+
     } catch (error) {
       if (error.name !== 'AbortError') {
         console.error('Error reading from PocketBase:', error);
       }
-      return [];
+      // Si hay error pero tenemos caché, devolverlo
+      return cache.separatedNumbers || [];
     }
   }
 
   return null;
 };
-
-
 
 // ====================================================
 // GUARDAR / CREAR / ACTUALIZAR TICKET
@@ -90,59 +100,64 @@ const set = async (key, value) => {
       localStorage.setItem(key, JSON.stringify(value));
     }
 
-
     // -----------------------------------------
-    // GUARDAR EN POCKETBASE
+    // GUARDAR EN POCKETBASE (optimizado)
     // -----------------------------------------
     else if (key === 'separatedNumbers') {
 
       console.log('Saving separatedNumbers to PocketBase:', value);
 
-      for (const ticket of value) {
-        try {
-          // buscar si ya existe el boleto
-          let existing = null;
+      // Procesar tickets en paralelo (máximo 5 a la vez)
+      const batchSize = 5;
+      for (let i = 0; i < value.length; i += batchSize) {
+        const batch = value.slice(i, i + batchSize);
+        
+        await Promise.all(batch.map(async (ticket) => {
           try {
-            existing = await pb.collection('tickets').getFirstListItem(
-              `num__boleto=${ticket.number}`,
-              { requestKey: null }
-            );
-          } catch (_) {
-            existing = null;
-          }
+            // Buscar si ya existe (optimizado con requestKey único)
+            let existing = null;
+            try {
+              existing = await pb.collection('tickets').getFirstListItem(
+                `num__boleto=${ticket.number}`,
+                { 
+                  requestKey: `check-${ticket.number}`,
+                  fields: 'id' // Solo necesitamos el ID
+                }
+              );
+            } catch (_) {
+              existing = null;
+            }
 
-          if (existing) {
-            // actualizar registro existente
-            console.log('Updating existing ticket:', existing.id);
-            await pb.collection('tickets').update(existing.id, {
+            const ticketData = {
               nombre: ticket.name,
               telefono: ticket.phone || '',
               vendido: true,
               fecha: new Date().toISOString()
-            });
-          } else {
-            // crear nuevo registro
-            console.log('Creating new ticket:', ticket);
-            await pb.collection('tickets').create({
-              nombre: ticket.name,
-              num__boleto: ticket.number,
-              telefono: ticket.phone || '',
-              vendido: true,
-              fecha: new Date().toISOString()
-            });
-          }
+            };
 
-        } catch (error) {
-          console.error('Error saving ticket:', error);
-        }
+            if (existing) {
+              await pb.collection('tickets').update(existing.id, ticketData);
+            } else {
+              await pb.collection('tickets').create({
+                ...ticketData,
+                num__boleto: ticket.number
+              });
+            }
+
+          } catch (error) {
+            console.error('Error saving ticket:', error);
+          }
+        }));
       }
+
+      // Invalidar caché después de guardar
+      cache.separatedNumbers = null;
+      cache.lastFetch = null;
     }
 
   } catch (error) {
     console.error('Error writing to PocketBase:', error);
-  }
-
-  finally {
+  } finally {
     isSaving = false;
   }
 };
@@ -154,6 +169,10 @@ const updateSeparatedTicket = async (ticket) => {
       telefono: ticket.phone,
       fecha: new Date().toISOString()
     });
+    
+    // Invalidar caché
+    cache.separatedNumbers = null;
+    cache.lastFetch = null;
   } catch (error) {
     console.error('Error updating ticket:', error);
     throw error;
@@ -163,11 +182,27 @@ const updateSeparatedTicket = async (ticket) => {
 const deleteSeparatedTicket = async (id) => {
   try {
     await pb.collection('tickets').delete(id);
+    
+    // Invalidar caché
+    cache.separatedNumbers = null;
+    cache.lastFetch = null;
   } catch (error) {
     console.error('Error deleting ticket:', error);
     throw error;
   }
 };
 
-const database = { get, set, updateSeparatedTicket, deleteSeparatedTicket };
+// Función helper para forzar refresh del caché
+const refreshCache = async () => {
+  return await get('separatedNumbers', true);
+};
+
+const database = { 
+  get, 
+  set, 
+  updateSeparatedTicket, 
+  deleteSeparatedTicket,
+  refreshCache 
+};
+
 export default database;

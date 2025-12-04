@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 
 const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSelect, onSeparateTickets, totalTickets, totalPrice }) => {
   const [showModal, setShowModal] = useState(false);
@@ -6,7 +6,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
   const [formData, setFormData] = useState({ name: '', phone: '' });
   const [phoneError, setPhoneError] = useState('');
 
-  const numbers = Array.from({ length: 100 }, (_, i) => i + 1);
+  const numbers = useMemo(() => Array.from({ length: 100 }, (_, i) => i + 1), []);
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -133,7 +133,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
             </div>
             <div className="bg-purple-500 bg-opacity-20 rounded-lg p-3">
               <p className="text-sm text-purple-200">Boletos disponibles</p>
-              <p className="text-2xl font-bold text-purple-300">{100 - totalTickets - separatedNumbers.length - selectedNumbersToSeparate.length}</p>
+              <p className="text-2xl font-bold text-purple-300">{100 - separatedNumbers.length - soldNumbers.length - selectedNumbersToSeparate.length}</p>
             </div>
           </div>
           {selectedNumbersToSeparate.length > 0 && (
