@@ -107,7 +107,7 @@ function App() {
 
  *IMPORTANTE:* Envía el comprobante de pago a este mismo número después de realizar la transferencia.
 
-¡Gracias por participar! 🎉`;
+¡Gracias por participar! `;
       const url = `https://wa.me/8442818979?text=${encodeURIComponent(message)}`;
       window.open(url, '_blank');
     });
