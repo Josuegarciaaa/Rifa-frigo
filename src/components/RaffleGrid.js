@@ -75,7 +75,7 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
               <p><strong>Nombre:</strong> Josue Francisco Garcia Cepeda</p>
               <p><strong>Concepto:</strong> numero separado</p>
             </div>
-            <p><strong>5.</strong> Envía el comprobante de pago por WhatsApp</p>
+            <p><strong>5.</strong> <span onClick={() => window.open(`https://wa.me/8442818979`, '_blank')} className="cursor-pointer hover:text-blue-300 underline">Envía el comprobante de pago por WhatsApp al numero 8442818979</span></p>
           </div>
         </div>
 

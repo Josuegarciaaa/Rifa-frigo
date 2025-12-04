@@ -100,17 +100,17 @@ function App() {
 
  *Información de pago:*
 • Precio: $50
-• Concepto: numero separado
+• Concepto: "numero(s) separado"
 • Tarjeta: 4910897092374420 (HSBC)
 • Nombre: Josue Francisco Garcia Cepeda
 
  Sorteo: 25 de diciembre de 2025 a las 3:00 PM CST
 
- *IMPORTANTE:* Envía el comprobante de pago a este mismo número después de realizar la transferencia.
+ *IMPORTANTE:* Envía el comprobante de pago a este mismo número después de realizar la transferencia/deposito.
 
 ¡Gracias por participar! `;
       const url = `https://wa.me/8442818979?text=${encodeURIComponent(message)}`;
-      window.open(url, '_blank');
+      window.location.href = url;
     });
   };
 
@@ -200,17 +200,17 @@ function App() {
               Precio: $50 por boleto
             </div>
             <div className="bg-gradient-to-r from-secondary to-primary text-mainText px-4 sm:px-6 py-3 rounded-full font-bold text-sm sm:text-base lg:text-lg shadow-xl transform hover:scale-110 transition-all duration-300 hover:shadow-2xl">
-              Boletos disponibles: {100 - totalTickets}
+              Boletos disponibles: {100 - totalTickets - totalSeparated - soldNumbers.length}
             </div>
           </div>
           <div className="w-full max-w-md mx-auto mb-4">
             <div className="bg-altBg bg-opacity-30 rounded-full h-3 overflow-hidden">
               <div
                 className="bg-gradient-to-r from-primary to-secondary h-full transition-all duration-500 ease-out"
-                style={{ width: `${((100 - totalTickets - totalSeparated) / 100) * 100}%` }}
+                style={{ width: `${((totalSeparated + soldNumbers.length) / 100) * 100}%` }}
               ></div>
             </div>
-            <p className="text-xs text-secText mt-1 text-center">Progreso de boletos disponibles</p>
+            <p className="text-xs text-secText mt-1 text-center">Progreso de boletos vendidos: {totalSeparated + soldNumbers.length}/100</p>
           </div>
           <p className="text-base sm:text-lg lg:text-xl text-secText font-semibold">
             Sorteo: 25 de diciembre de 2025 a las 3:00 PM CST
