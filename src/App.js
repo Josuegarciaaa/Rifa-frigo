@@ -196,21 +196,77 @@ function App() {
       <div className="absolute inset-0 bg-altBg bg-opacity-10"></div>
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Header */}
-        <div className="text-center mb-8 sm:mb-12 bg-altBg bg-opacity-10 backdrop-blur-md rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl border border-mainText border-opacity-20">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-mainText mb-2 sm:mb-4 drop-shadow-lg">
-            Rifa del Frigobar
-          </h1>
-          <p className="text-lg sm:text-xl lg:text-2xl text-secText mb-4 font-medium">
-            ¡Gana un hermoso frigobar!
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6 mb-4">
-            <div className="bg-gradient-to-r from-primary to-secondary text-mainText px-4 sm:px-6 py-3 rounded-full font-bold text-sm sm:text-base lg:text-lg shadow-xl transform hover:scale-110 transition-all duration-300 hover:shadow-2xl">
-              Precio: $50 por boleto
+        <div className="text-center mb-8 sm:mb-12 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-600 bg-opacity-95 backdrop-blur-md rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border-4 border-yellow-400 border-opacity-70 relative overflow-hidden animate-pulse">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10 animate-shimmer"></div>
+          <div className="relative z-10">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-2 sm:mb-4 drop-shadow-2xl animate-bounce">
+              🎉 Rifa del Frigobar 🎉
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl text-yellow-200 mb-4 font-bold animate-pulse">
+              ¡Gana un hermoso frigobar! 🏆
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6 mb-4">
+              <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-red-800 px-6 sm:px-8 py-4 rounded-full font-bold text-sm sm:text-base lg:text-lg shadow-2xl transform hover:scale-110 transition-all duration-300 hover:shadow-3xl border-2 border-yellow-300 animate-pulse">
+                💰 Precio: $50 por boleto 💰
+              </div>
             </div>
+            <p className="text-base sm:text-lg lg:text-xl text-white font-bold animate-pulse drop-shadow-lg">
+              📅 Sorteo: 25 de diciembre de 2025 a las 3:00 PM CST ⏰
+            </p>
           </div>
-          <p className="text-base sm:text-lg lg:text-xl text-secText font-semibold">
-            Sorteo: 25 de diciembre de 2025 a las 3:00 PM CST
-          </p>
+        </div>
+
+        {/* Live Event Section */}
+        <div className="mt-8 sm:mt-12 lg:mt-16 bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 bg-opacity-95 backdrop-blur-md rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border-4 border-yellow-400 border-opacity-70 animate-pulse relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10 animate-shimmer"></div>
+          <div className="relative z-10 text-center">
+            <div className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-red-800 px-6 py-3 rounded-full font-bold text-lg sm:text-xl shadow-2xl mb-4 animate-bounce border-2 border-yellow-300">
+              🔥 EN VIVO 🔥
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-center text-white mb-6 sm:mb-8 drop-shadow-2xl animate-pulse">
+               🎉 Sorteo en Vivo por YouTube 🎉
+            </h2>
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
+              <div className="bg-gradient-to-r from-red-600 to-red-800 text-white px-6 py-3 rounded-full font-bold text-lg sm:text-xl shadow-2xl inline-block animate-pulse border-2 border-red-400">
+                 📅 Fecha: 25 de diciembre de 2025
+              </div>
+              <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-3 rounded-full font-bold text-lg sm:text-xl shadow-2xl inline-block animate-pulse border-2 border-blue-400">
+                 🕒 Hora: 3:00 PM CST
+              </div>
+            </div>
+            <div className="mb-6">
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 drop-shadow-lg animate-pulse">⏰ Tiempo restante para el sorteo:</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                <div className="bg-gradient-to-br from-yellow-400 to-orange-500 bg-opacity-30 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-2xl border-2 border-yellow-300 animate-pulse">
+                  <div className="text-2xl sm:text-3xl font-bold text-red-800 drop-shadow-lg">{timeLeft.days}</div>
+                  <div className="text-xs sm:text-sm text-red-900 font-bold">Días</div>
+                </div>
+                <div className="bg-gradient-to-br from-green-400 to-blue-500 bg-opacity-30 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-2xl border-2 border-green-300 animate-pulse">
+                  <div className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">{timeLeft.hours}</div>
+                  <div className="text-xs sm:text-sm text-green-900 font-bold">Horas</div>
+                </div>
+                <div className="bg-gradient-to-br from-purple-400 to-pink-500 bg-opacity-30 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-2xl border-2 border-purple-300 animate-pulse">
+                  <div className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">{timeLeft.minutes}</div>
+                  <div className="text-xs sm:text-sm text-purple-900 font-bold">Minutos</div>
+                </div>
+                <div className="bg-gradient-to-br from-red-400 to-pink-500 bg-opacity-30 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-2xl border-2 border-red-300 animate-pulse">
+                  <div className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">{timeLeft.seconds}</div>
+                  <div className="text-xs sm:text-sm text-red-900 font-bold">Segundos</div>
+                </div>
+              </div>
+            </div>
+            <div className="mb-4">
+              <a href="https://www.youtube.com/live/-AgH3MKoKcM?si=Zv73TMNWYxUn1Ev5" target="_blank" rel="noopener noreferrer" className="inline-flex items-center bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white px-8 py-4 rounded-full font-bold text-xl shadow-2xl hover:from-red-700 hover:via-red-800 hover:to-red-900 transition-all duration-300 transform hover:scale-110 hover:shadow-3xl border-2 border-red-400 animate-pulse">
+                <svg className="w-8 h-8 mr-3 animate-spin" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                🚀 ¡Haz clic para ver el sorteo en vivo en YouTube! 🚀
+              </a>
+            </div>
+            <p className="text-lg sm:text-xl text-white font-bold animate-pulse drop-shadow-lg">
+              ✨ ¡No te lo pierdas! El sorteo será transmitido en vivo para asegurar la transparencia y emoción del momento. ✨
+            </p>
+          </div>
         </div>
 
         {/* Prize Section */}
@@ -243,54 +299,67 @@ function App() {
         />
 
         {/* Live Event Section */}
-        <div className="mt-8 sm:mt-12 lg:mt-16 bg-altBg bg-opacity-10 backdrop-blur-md rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border border-mainText border-opacity-20">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center text-mainText mb-6 sm:mb-8 drop-shadow-lg">
-             Sorteo en Vivo por YouTube
-          </h2>
-          <div className="text-center">
-            <div className="bg-red-600 text-white px-6 py-3 rounded-full font-bold text-lg sm:text-xl shadow-xl inline-block mb-4">
-               Fecha: 25 de diciembre de 2025
-            </div>
-            <div className="bg-blue-600 text-white px-6 py-3 rounded-full font-bold text-lg sm:text-xl shadow-xl inline-block mb-6">
-               Hora: 3:00 PM CST
-            </div>
-            <div className="mb-6">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 drop-shadow-lg"> Tiempo restante para el sorteo:</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                <div className="bg-white bg-opacity-20 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-lg border border-white border-opacity-20">
-                  <div className="text-2xl sm:text-3xl font-bold text-yellow-300">{timeLeft.days}</div>
-                  <div className="text-xs sm:text-sm text-white">Días</div>
+        <div className="mt-8 sm:mt-12 lg:mt-16 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 bg-opacity-95 backdrop-blur-md rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border-4 border-cyan-400 border-opacity-70 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10"></div>
+          <div className="relative z-10">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center text-white mb-6 sm:mb-8 drop-shadow-2xl">
+               📺 Sorteo en Vivo por YouTube 📺
+            </h2>
+            <div className="text-center">
+              <div className="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
+                <div className="bg-gradient-to-r from-red-600 to-red-800 text-white px-6 py-3 rounded-full font-bold text-lg sm:text-xl shadow-2xl inline-block border-2 border-red-400">
+                   📅 Fecha: 25 de diciembre de 2025
                 </div>
-                <div className="bg-white bg-opacity-20 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-lg border border-white border-opacity-20">
-                  <div className="text-2xl sm:text-3xl font-bold text-yellow-300">{timeLeft.hours}</div>
-                  <div className="text-xs sm:text-sm text-white">Horas</div>
-                </div>
-                <div className="bg-white bg-opacity-20 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-lg border border-white border-opacity-20">
-                  <div className="text-2xl sm:text-3xl font-bold text-yellow-300">{timeLeft.minutes}</div>
-                  <div className="text-xs sm:text-sm text-white">Minutos</div>
-                </div>
-                <div className="bg-white bg-opacity-20 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-lg border border-white border-opacity-20">
-                  <div className="text-2xl sm:text-3xl font-bold text-yellow-300">{timeLeft.seconds}</div>
-                  <div className="text-xs sm:text-sm text-white">Segundos</div>
+                <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-3 rounded-full font-bold text-lg sm:text-xl shadow-2xl inline-block border-2 border-blue-400">
+                   🕒 Hora: 3:00 PM CST
                 </div>
               </div>
+              <div className="mb-6">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 drop-shadow-lg">⏰ Tiempo restante para el sorteo:</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                  <div className="bg-gradient-to-br from-yellow-400 to-orange-500 bg-opacity-30 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-2xl border-2 border-yellow-300">
+                    <div className="text-2xl sm:text-3xl font-bold text-red-800 drop-shadow-lg">{timeLeft.days}</div>
+                    <div className="text-xs sm:text-sm text-red-900 font-bold">Días</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-green-400 to-blue-500 bg-opacity-30 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-2xl border-2 border-green-300">
+                    <div className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">{timeLeft.hours}</div>
+                    <div className="text-xs sm:text-sm text-green-900 font-bold">Horas</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-purple-400 to-pink-500 bg-opacity-30 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-2xl border-2 border-purple-300">
+                    <div className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">{timeLeft.minutes}</div>
+                    <div className="text-xs sm:text-sm text-purple-900 font-bold">Minutos</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-red-400 to-pink-500 bg-opacity-30 backdrop-blur-md rounded-lg p-3 sm:p-4 shadow-2xl border-2 border-red-300">
+                    <div className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">{timeLeft.seconds}</div>
+                    <div className="text-xs sm:text-sm text-red-900 font-bold">Segundos</div>
+                  </div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <a href="https://www.youtube.com/live/-AgH3MKoKcM?si=Zv73TMNWYxUn1Ev5" target="_blank" rel="noopener noreferrer" className="inline-flex items-center bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white px-8 py-4 rounded-full font-bold text-xl shadow-2xl hover:from-red-700 hover:via-red-800 hover:to-red-900 transition-all duration-300 transform hover:scale-110 hover:shadow-3xl border-2 border-red-400">
+                  <svg className="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                  🚀 ¡Haz clic para ver el sorteo en vivo en YouTube! 🚀
+                </a>
+              </div>
+              <p className="text-base sm:text-lg text-white font-bold drop-shadow-lg">
+                ✨ ¡No te lo pierdas! El sorteo será transmitido en vivo para asegurar la transparencia y emoción del momento. ✨
+              </p>
             </div>
-            <p className="text-lg sm:text-xl text-secText mb-4 font-medium">
-              El enlace del sorteo en vivo se subirá el día del evento.
-            </p>
-            <p className="text-base sm:text-lg text-secText">
-              ¡No te lo pierdas! El sorteo será transmitido en vivo para asegurar la transparencia y emoción del momento.
-            </p>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-8 sm:mt-12 lg:mt-16 bg-gradient-to-r from-white to-altBg bg-opacity-10 backdrop-blur-md rounded-2xl p-4 sm:p-6 shadow-xl border border-white border-opacity-20">
-          <p className="text-lg sm:text-xl text-black font-medium mb-4">
-            ¡No te quedes sin tu boleto! El sorteo se acerca.
-          </p>
-          <div className="mt-6 text-sm text-black">
-            <p>© 2025 <span onClick={handleAdminClick} className="cursor-pointer hover:text-blue-600">Josue Garcia</span> - Todos los derechos reservados</p>
+        <div className="text-center mt-8 sm:mt-12 lg:mt-16 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-600 bg-opacity-95 backdrop-blur-md rounded-3xl p-4 sm:p-6 shadow-2xl border-4 border-indigo-400 border-opacity-70 relative overflow-hidden animate-pulse">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10 animate-shimmer"></div>
+          <div className="relative z-10">
+            <p className="text-lg sm:text-xl text-white font-bold mb-4 animate-pulse drop-shadow-lg">
+              🚨 ¡No te quedes sin tu boleto! El sorteo se acerca. 🚨
+            </p>
+            <div className="mt-6 text-sm text-white font-bold animate-pulse">
+              <p>© 2025 <span onClick={handleAdminClick} className="cursor-pointer hover:text-yellow-300 transition-colors animate-pulse">👨‍💻 Josue Garcia</span> - Todos los derechos reservados</p>
+            </div>
           </div>
         </div>
 

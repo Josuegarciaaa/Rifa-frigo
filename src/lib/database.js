@@ -107,8 +107,8 @@ const set = async (key, value) => {
 
       console.log('Saving separatedNumbers to PocketBase:', value);
 
-      // Procesar tickets en paralelo (máximo 5 a la vez)
-      const batchSize = 5;
+      // Procesar tickets uno por uno para evitar conflictos
+      const batchSize = 1;
       for (let i = 0; i < value.length; i += batchSize) {
         const batch = value.slice(i, i + batchSize);
         

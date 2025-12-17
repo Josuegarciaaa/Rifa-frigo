@@ -57,25 +57,28 @@ const RaffleGrid = ({ selectedNumbers, separatedNumbers, soldNumbers, onNumberSe
 
   return (
     <>
-      <div className="max-w-7xl mx-auto bg-white bg-opacity-10 backdrop-blur-md rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border border-white border-opacity-20 mb-8">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-center text-white mb-6 sm:mb-8 drop-shadow-lg">
-           Separa tus números
-        </h2>
+      <div className="max-w-7xl mx-auto bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 bg-opacity-95 backdrop-blur-md rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl border-4 border-orange-400 border-opacity-70 mb-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10"></div>
+        <div className="relative z-10">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-center text-white mb-6 sm:mb-8 drop-shadow-2xl">
+             🎫 Separa tus números 🎫
+          </h2>
+        </div>
 
         {/* Payment Instructions */}
-        <div className="bg-yellow-500 bg-opacity-20 backdrop-blur-md rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border border-yellow-400 border-opacity-30">
-          <h3 className="text-lg sm:text-xl font-bold text-yellow-200 mb-4"> Instrucciones para separar boletos:</h3>
+        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-opacity-30 backdrop-blur-md rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-yellow-300 border-opacity-50">
+          <h3 className="text-lg sm:text-xl font-bold text-yellow-100 mb-4">📋 Instrucciones para separar boletos:</h3>
           <div className="text-sm sm:text-base text-white space-y-2">
-            <p><strong>1.</strong> Haz clic en los números que deseas seleccionar (se marcarán en azul)</p>
-            <p><strong>2.</strong> Presiona el botón "✂️ Separar Seleccionados" que aparecerá abajo</p>
-            <p><strong>3.</strong> Completa tus datos (nombre y teléfono)</p>
-            <p><strong>4.</strong> Realiza el pago de $50 por boleto a:</p>
-            <div className="bg-white bg-opacity-20 rounded-lg p-3 mt-3">
-              <p><strong>Tarjeta:</strong> 4910897092374420 (HSBC) <button onClick={() => copyToClipboard('4910897092374420')} className="ml-2 bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600">Copiar</button></p>
-              <p><strong>Nombre:</strong> Josue Francisco Garcia Cepeda</p>
-              <p><strong>Concepto:</strong> numero separado</p>
+            <p><strong>1️⃣</strong> Haz clic en los números que deseas seleccionar (se marcarán en azul)</p>
+            <p><strong>2️⃣</strong> Presiona el botón "✂️ Separar Seleccionados" que aparecerá abajo</p>
+            <p><strong>3️⃣</strong> Completa tus datos (nombre y teléfono)</p>
+            <p><strong>4️⃣</strong> Realiza el pago de $50 por boleto a:</p>
+            <div className="bg-white bg-opacity-20 rounded-lg p-3 mt-3 border border-white border-opacity-30">
+              <p><strong>💳 Tarjeta:</strong> 4910897092374420 (HSBC) <button onClick={() => copyToClipboard('4910897092374420')} className="ml-2 bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600">📋 Copiar</button></p>
+              <p><strong>👤 Nombre:</strong> Josue Francisco Garcia Cepeda</p>
+              <p><strong>📝 Concepto:</strong> numero separado</p>
             </div>
-            <p><strong>5.</strong> Al separar el boleto se te enviará automáticamente a WhatsApp para confirmar la compra. Si no abre, favor de enviar comprobante al número 8442818979</p>
+            <p><strong>5️⃣</strong> Al separar el boleto se te enviará automáticamente a WhatsApp para confirmar la compra. Si no abre, favor de enviar comprobante al número 8442818979</p>
           </div>
         </div>
 
